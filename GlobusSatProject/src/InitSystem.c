@@ -31,9 +31,37 @@ Boolean isFirstActivation()
 	return *flag;
 }
 
-void firstActivationProcedure(){
+void firstActivationProcedure()
+{
+	time_unix secondsSinceDeploy = 0;
 
+	int err = FRAM_read((unsigned char*)secondsSinceDeploy, SECONDS_SINCE_DEPLOY_ADDR, SECONDS_SINCE_DEPLOY_SIZE);  // Check time since deploy
+	if(err != 0)
+	{
+		secondsSinceDeploy = MINUTES_TO_SECONDS(30);
 	}
+
+	while (secondsSinceDeploy < MINUTES_TO_SECONDS(30))
+	{
+		vTaskDelay(SECONDS_TO_TICKS(10));  // Wait until time is up
+
+		err = FRAM_write((unsigned char*)&secondsSinceDeploy, SECONDS_SINCE_DEPLOY_ADDR, SECONDS_SINCE_DEPLOY_SIZE);  // Write new time to memory
+		if (err != 0)
+		{
+			break;
+		}
+	}
+
+	TelemetryCollectorLogic();
+
+	sat_packet_t cmd = {0};
+
+	GetOnlineCommand(&cmd);
+	ActUponCommand(&cmd);
+
+	isis_eps__watchdog__from_t wdResponse;
+	isis_eps__watchdog__tm(EPS_I2C_BUS_INDEX,&wdResponse);  // Reset EPS watchdog
+}
 
 #ifndef TESTING
 	//IsisAntS_autoDeployment(0, isisants_sideA, 10);
