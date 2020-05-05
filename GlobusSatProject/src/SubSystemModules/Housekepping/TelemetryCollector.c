@@ -333,3 +333,9 @@ void GetCurrentWODTelemetry(WOD_Telemetry_t *wod){
 	NUMBER_OF_RESETS_ADDR, NUMBER_OF_RESETS_SIZE);
 }
 
+int initTelemetryCollector()
+{
+	return FRAM_read((unsigned char*)tlm_save_periods,
+			TLM_SAVE_PERIOD_START_ADDR,
+			NUM_OF_SUBSYSTEMS_SAVE_FUNCTIONS*sizeof(time_unix));
+}

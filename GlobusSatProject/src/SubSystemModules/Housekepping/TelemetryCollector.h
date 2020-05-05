@@ -87,4 +87,9 @@ void TelemetrySaveWOD();
  */
 void GetCurrentWODTelemetry(WOD_Telemetry_t *wod);
 
+/*!
+ * @brief Inits the telemetryCollector
+ * */
+int initTelemetryCollector();
+
 #endif /* TELEMETRYCOLLECTOR_H_ */
