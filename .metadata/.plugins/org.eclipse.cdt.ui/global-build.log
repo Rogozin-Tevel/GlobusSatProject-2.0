@@ -1,0 +1,40 @@
+17:54:47 **** Clean-only build of configuration Debug for project GlobusSatProject ****
+make -r -k clean 
+rm -rf  GlobusSatProject.siz  ./src/SubSystemModules/PowerManagment/EPS.o ./src/SubSystemModules/PowerManagment/EPSOperationModes.o  ./src/SubSystemModules/Housekepping/TelemetryCollector.o  ./src/SubSystemModules/Communication/AckHandler.o ./src/SubSystemModules/Communication/ActUponCommand.o ./src/SubSystemModules/Communication/Beacon.o ./src/SubSystemModules/Communication/CommandDictionary.o ./src/SubSystemModules/Communication/SatCommandHandler.o ./src/SubSystemModules/Communication/SatDataTx.o ./src/SubSystemModules/Communication/TRXVU.o  ./src/InitSystem.o ./src/TLM_management.o ./src/main.o  ./src/SubSystemModules/PowerManagment/EPS.d ./src/SubSystemModules/PowerManagment/EPSOperationModes.d  ./src/SubSystemModules/Housekepping/TelemetryCollector.d  ./src/SubSystemModules/Communication/AckHandler.d ./src/SubSystemModules/Communication/ActUponCommand.d ./src/SubSystemModules/Communication/Beacon.d ./src/SubSystemModules/Communication/CommandDictionary.d ./src/SubSystemModules/Communication/SatCommandHandler.d ./src/SubSystemModules/Communication/SatDataTx.d ./src/SubSystemModules/Communication/TRXVU.d  ./src/InitSystem.d ./src/TLM_management.d ./src/main.d  GlobusSatProject.bin  GlobusSatProject.elf
+ 
+17:54:47 **** Build of configuration Debug for project GlobusSatProject ****
+make -r -k all 
+Building file: ../src/TestingDemos/CommandsTestingDemo.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=arm926ej-s -std=c99 -O0 -fmessage-length=0 -ffunction-sections -Wall -Wextra  -g -std=c99 -Dsdram -Dat91sam9g20 -DTRACE_LEVEL=5 -DDEBUG=1 -D'BASE_REVISION_NUMBER=' -D'BASE_REVISION_HASH_SHORT=' -D'BASE_REVISION_HASH=' -I"C:/ISIS/workspace/GlobusSatProject/..//satellite-subsystems/satellite-subsystems/include" -I"C:\ISIS\workspace\GlobusSatProject\src" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/hcc/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/freertos/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/hal/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/at91/include" -MMD -MP -MF"src/TestingDemos/CommandsTestingDemo.d" -MT"src/TestingDemos/CommandsTestingDemo.d" -c -o "src/TestingDemos/CommandsTestingDemo.o" "../src/TestingDemos/CommandsTestingDemo.c"
+Finished building: ../src/TestingDemos/CommandsTestingDemo.c
+ 
+Building file: ../src/TestingDemos/EpsTestingDemo.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=arm926ej-s -std=c99 -O0 -fmessage-length=0 -ffunction-sections -Wall -Wextra  -g -std=c99 -Dsdram -Dat91sam9g20 -DTRACE_LEVEL=5 -DDEBUG=1 -D'BASE_REVISION_NUMBER=' -D'BASE_REVISION_HASH_SHORT=' -D'BASE_REVISION_HASH=' -I"C:/ISIS/workspace/GlobusSatProject/..//satellite-subsystems/satellite-subsystems/include" -I"C:\ISIS\workspace\GlobusSatProject\src" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/hcc/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/freertos/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/hal/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/at91/include" -MMD -MP -MF"src/TestingDemos/EpsTestingDemo.d" -MT"src/TestingDemos/EpsTestingDemo.d" -c -o "src/TestingDemos/EpsTestingDemo.o" "../src/TestingDemos/EpsTestingDemo.c"
+Finished building: ../src/TestingDemos/EpsTestingDemo.c
+ 
+Building file: ../src/TestingDemos/FileSystemTestingDemo.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=arm926ej-s -std=c99 -O0 -fmessage-length=0 -ffunction-sections -Wall -Wextra  -g -std=c99 -Dsdram -Dat91sam9g20 -DTRACE_LEVEL=5 -DDEBUG=1 -D'BASE_REVISION_NUMBER=' -D'BASE_REVISION_HASH_SHORT=' -D'BASE_REVISION_HASH=' -I"C:/ISIS/workspace/GlobusSatProject/..//satellite-subsystems/satellite-subsystems/include" -I"C:\ISIS\workspace\GlobusSatProject\src" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/hcc/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/freertos/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/hal/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/at91/include" -MMD -MP -MF"src/TestingDemos/FileSystemTestingDemo.d" -MT"src/TestingDemos/FileSystemTestingDemo.d" -c -o "src/TestingDemos/FileSystemTestingDemo.o" "../src/TestingDemos/FileSystemTestingDemo.c"
+Finished building: ../src/TestingDemos/FileSystemTestingDemo.c
+ 
+Building file: ../src/TestingDemos/MainTest.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=arm926ej-s -std=c99 -O0 -fmessage-length=0 -ffunction-sections -Wall -Wextra  -g -std=c99 -Dsdram -Dat91sam9g20 -DTRACE_LEVEL=5 -DDEBUG=1 -D'BASE_REVISION_NUMBER=' -D'BASE_REVISION_HASH_SHORT=' -D'BASE_REVISION_HASH=' -I"C:/ISIS/workspace/GlobusSatProject/..//satellite-subsystems/satellite-subsystems/include" -I"C:\ISIS\workspace\GlobusSatProject\src" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/hcc/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/freertos/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/hal/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/at91/include" -MMD -MP -MF"src/TestingDemos/MainTest.d" -MT"src/TestingDemos/MainTest.d" -c -o "src/TestingDemos/MainTest.o" "../src/TestingDemos/MainTest.c"
+Finished building: ../src/TestingDemos/MainTest.c
+ 
+Building file: ../src/TestingDemos/MaintenanceTestingDemo.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=arm926ej-s -std=c99 -O0 -fmessage-length=0 -ffunction-sections -Wall -Wextra  -g -std=c99 -Dsdram -Dat91sam9g20 -DTRACE_LEVEL=5 -DDEBUG=1 -D'BASE_REVISION_NUMBER=' -D'BASE_REVISION_HASH_SHORT=' -D'BASE_REVISION_HASH=' -I"C:/ISIS/workspace/GlobusSatProject/..//satellite-subsystems/satellite-subsystems/include" -I"C:\ISIS\workspace\GlobusSatProject\src" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/hcc/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/freertos/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/hal/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/at91/include" -MMD -MP -MF"src/TestingDemos/MaintenanceTestingDemo.d" -MT"src/TestingDemos/MaintenanceTestingDemo.d" -c -o "src/TestingDemos/MaintenanceTestingDemo.o" "../src/TestingDemos/MaintenanceTestingDemo.c"
+Finished building: ../src/TestingDemos/MaintenanceTestingDemo.c
+ 
+Building file: ../src/TestingDemos/TelemetryTestingDemo.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=arm926ej-s -std=c99 -O0 -fmessage-length=0 -ffunction-sections -Wall -Wextra  -g -std=c99 -Dsdram -Dat91sam9g20 -DTRACE_LEVEL=5 -DDEBUG=1 -D'BASE_REVISION_NUMBER=' -D'BASE_REVISION_HASH_SHORT=' -D'BASE_REVISION_HASH=' -I"C:/ISIS/workspace/GlobusSatProject/..//satellite-subsystems/satellite-subsystems/include" -I"C:\ISIS\workspace\GlobusSatProject\src" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/hcc/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/freertos/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/hal/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/at91/include" -MMD -MP -MF"src/TestingDemos/TelemetryTestingDemo.d" -MT"src/TestingDemos/TelemetryTestingDemo.d" -c -o "src/TestingDemos/TelemetryTestingDemo.o" "../src/TestingDemos/TelemetryTestingDemo.c"
+Finished building: ../src/TestingDemos/TelemetryTestingDemo.c
+ 
+Building file: ../src/TestingDemos/TrxvuTestingDemo.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=arm926ej-s -std=c99 -O0 -fmessage-length=0 -ffunction-sections -Wall -Wextra  -g -std=c99 -Dsdram -Dat91sam9g20 -DTRACE_LEVEL=5 -DDEBUG=1 -D'BASE_REVISION_NUMBER=' -D'BASE_REVISION_HASH_SHORT=' -D'BASE_REVISION_HASH=' -I"C:/ISIS/workspace/GlobusSatProject/..//satellite-subsystems/satellite-subsystems/include" -I"C:\ISIS\workspace\GlobusSatProject\src" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/hcc/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/freertos/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/hal/include" -I"C:/ISIS/workspace/GlobusSatProject/..//hal/at91/include" -MMD -MP -MF"src/TestingDemos/TrxvuTestingDemo.d" -MT"src/TestingDemos/TrxvuTestingDemo.d" -c -o "src/TestingDemos/TrxvuTestingDemo.o" "../src/TestingDemos/TrxvuTestingDemo.c"
+Command canceled

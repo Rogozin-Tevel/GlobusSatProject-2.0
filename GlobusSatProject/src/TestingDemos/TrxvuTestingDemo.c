@@ -81,15 +81,15 @@ Boolean TestTrxvuLogic()
 	int err = 0;
 	while(UTIL_DbguGetIntegerMinMax((unsigned int*)&minutes,0,10) == 0);
 
-	portTickType curr_time = xTaskGetTickCount();
-	portTickType end_time = MINUTES_TO_TICKS(minutes) + curr_time;
+	portLONG curr_time = xTaskGetTickCount();
+	portLONG end_time = MINUTES_TO_TICKS(minutes) + curr_time;
 
 	while(end_time - curr_time > 0)
 	{
 		curr_time = xTaskGetTickCount();
 
 		err = TRX_Logic();
-		if(0 != err){
+		if(cmd_command_found != err && cmd_no_command_found != err){
 			printf("error in TRX_Logic = %d\n exiting\n",err);
 			return TRUE;
 		}
@@ -188,20 +188,39 @@ Boolean TestExitDump()
 Boolean TestDumpTelemetry()
 {
 	sat_packet_t cmd = {0};
+	dump_arguments_t task_args = {0};
 	unsigned int temp = 0;
 	printf("Starting Dump. Please Insert Dump Parameter:\n");
 
 	printf("Please Insert Command Type:\n");
-	while(UTIL_DbguGetIntegerMinMax(&temp,0,255));
+	while(UTIL_DbguGetIntegerMinMax(&temp,0,255) == 0);
 	cmd.cmd_type = temp;
 
 	printf("Please Insert Command Subtype:\n");
-	while(UTIL_DbguGetIntegerMinMax(&temp,0,255));
+	while(UTIL_DbguGetIntegerMinMax(&temp,0,255) == 0);
 	cmd.cmd_subtype = temp;
 
 	printf("Please Insert Command ID:\n");
-	while(UTIL_DbguGetIntegerMinMax(&temp,0,0xFFFFFFFF));
+	while(UTIL_DbguGetIntegerMinMax(&temp,0,0xFFFFFFFF) == 0);
 	cmd.ID = temp;
+
+	printf("Please Insert Command data:\n");
+
+	int offset = 0;
+	printf("Please Insert dump type:\n");
+	while(UTIL_DbguGetIntegerMinMax(&temp,0,255) == 0); //dumptype
+	memcpy(&(cmd.data[offset]),&temp,sizeof(task_args.dump_type));
+	offset += sizeof(task_args.dump_type);
+
+	printf("Please Insert dump start time:\n");
+	while(UTIL_DbguGetIntegerMinMax(&temp,0,0xFFFFFFFF) == 0); //start
+	memcpy(&(cmd.data[offset]),&temp,sizeof(task_args.t_start));
+	offset += sizeof(task_args.t_start);
+
+	printf("Please Insert dump end time:\n");
+	while(UTIL_DbguGetIntegerMinMax(&temp,0,0xFFFFFFFF) == 0); //end
+	memcpy(&(cmd.data[offset]),&temp,sizeof(task_args.t_end));
+
 
 	DumpTelemetry(&cmd);
 	return TRUE;

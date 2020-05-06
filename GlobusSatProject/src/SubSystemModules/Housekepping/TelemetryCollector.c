@@ -24,15 +24,9 @@ typedef enum{
 	wod_tlm
 }subsystem_tlm;
 
-time_unix tlm_save_periods[NUM_OF_SUBSYSTEMS_SAVE_FUNCTIONS] = {0};
+time_unix tlm_save_periods[NUM_OF_SUBSYSTEMS_SAVE_FUNCTIONS] = {1,1,1,1,1};
 time_unix tlm_last_save_time[NUM_OF_SUBSYSTEMS_SAVE_FUNCTIONS]= {0};
 
-/*
-
-
-
-
-	*/
 int GetTelemetryFilenameByType(tlm_type tlm_type, char filename[MAX_F_FILE_NAME_SIZE])
 {
 	if(NULL == filename){
@@ -66,18 +60,18 @@ int GetTelemetryFilenameByType(tlm_type tlm_type, char filename[MAX_F_FILE_NAME_
 	case tlm_tx:
 		strcpy(filename,FILENAME_TX_TLM);
 		break;
-	case tlm_tx_revc:
-		strcpy(filename,FILENAME_TX_REVC);
-		break;
 	case tlm_rx:
 		strcpy(filename,FILENAME_RX_TLM);
 		break;
+	case tlm_tx_revc:
+		strcpy(filename,FILENAME_RX_TLM);
+		break;
 	case tlm_rx_revc:
-		strcpy(filename,FILENAME_RX_REVC);
+		strcpy(filename,FILENAME_RX_TLM);
 		break;
-	case tlm_rx_frame:
-		strcpy(filename,FILENAME_RX_FRAME);
-		break;
+//	case tlm_rx_frame: //TODO: Check if this is needed
+//		strcpy(filename,FILENAME_RX_FRAME);
+//		break;
 	case tlm_antenna:
 		strcpy(filename,FILENAME_ANTENNA_TLM);
 		break;
@@ -87,7 +81,10 @@ int GetTelemetryFilenameByType(tlm_type tlm_type, char filename[MAX_F_FILE_NAME_
 	return 0;
 }
 
-
+int InitTelemetryCollrctor()
+{
+	return FRAM_read((unsigned char*)tlm_save_periods,TLM_SAVE_PERIOD_START_ADDR,NUM_OF_SUBSYSTEMS_SAVE_FUNCTIONS*sizeof(time_unix));
+}
 void TelemetryCollectorLogic()
 {
 	if (CheckExecutionTime(tlm_last_save_time[eps_tlm],tlm_save_periods[eps_tlm])){
@@ -122,6 +119,9 @@ void TelemetryCollectorLogic()
 void TelemetryCreateFiles(Boolean8bit tlms_created[NUMBER_OF_TELEMETRIES]){
 	FileSystemResult res;
 	FRAM_read((unsigned char*)tlm_save_periods,TLM_SAVE_PERIOD_START_ADDR,NUM_OF_SUBSYSTEMS_SAVE_FUNCTIONS*sizeof(time_unix));
+	// -- WOD files
+	res = c_fileCreate(FILENAME_WOD_TLM,sizeof(WOD_Telemetry_t));
+	SAVE_FLAG_IF_FILE_CREATED(tlm_wod)
 
 	// -- EPS files
 	res = c_fileCreate(FILENAME_EPS_HK_RAW_TLM,sizeof(isis_eps__gethousekeepingraw__from_t));
@@ -147,14 +147,15 @@ void TelemetryCreateFiles(Boolean8bit tlms_created[NUMBER_OF_TELEMETRIES]){
 	res = c_fileCreate(FILENAME_TX_TLM,sizeof(ISIStrxvuTxTelemetry));
 	SAVE_FLAG_IF_FILE_CREATED(tlm_tx);
 
-	res = c_fileCreate(FILENAME_TX_REVC,sizeof(ISIStrxvuTxTelemetry_revC));
-	SAVE_FLAG_IF_FILE_CREATED(tlm_tx_revc);
-
 	res = c_fileCreate(FILENAME_RX_TLM,sizeof(ISIStrxvuRxTelemetry));
 	SAVE_FLAG_IF_FILE_CREATED(tlm_rx);
 
-	res = c_fileCreate(FILENAME_RX_REVC,sizeof(ISIStrxvuRxTelemetry_revC));
+	res = c_fileCreate(FILENAME_TX_REVC,sizeof(ISIStrxvuRxTelemetry));
+	SAVE_FLAG_IF_FILE_CREATED(tlm_tx_revc);
+
+	res = c_fileCreate(FILENAME_RX_REVC,sizeof(ISIStrxvuRxTelemetry));
 	SAVE_FLAG_IF_FILE_CREATED(tlm_rx_revc);
+
 	// -- ANT files
 	res = c_fileCreate(FILENAME_ANTENNA_TLM,sizeof(ISISantsTelemetry));
 	SAVE_FLAG_IF_FILE_CREATED(tlm_antenna);
@@ -202,6 +203,12 @@ void TelemetrySaveTRXVU()
 	{
 		c_fileWrite(FILENAME_TX_TLM, &tx_tlm);
 	}
+	ISIStrxvuRxTelemetry rx_tlm;
+	err = IsisTrxvu_rcGetTelemetryAll(ISIS_TRXVU_I2C_BUS_INDEX, &rx_tlm);
+	if (err == 0)
+	{
+		c_fileWrite(FILENAME_RX_TLM, &rx_tlm);
+	}
 
 	ISIStrxvuTxTelemetry_revC revc_tx_tlm;
 	err = IsisTrxvu_tcGetTelemetryAll_revC(ISIS_TRXVU_I2C_BUS_INDEX,
@@ -211,13 +218,6 @@ void TelemetrySaveTRXVU()
 		c_fileWrite(FILENAME_TX_REVC, &revc_tx_tlm);
 	}
 
-	ISIStrxvuRxTelemetry rx_tlm;
-	err = IsisTrxvu_rcGetTelemetryAll(ISIS_TRXVU_I2C_BUS_INDEX, &rx_tlm);
-	if (err == 0)
-	{
-		c_fileWrite(FILENAME_RX_TLM, &rx_tlm);
-	}
-
 	ISIStrxvuRxTelemetry_revC revc_rx_tlm;
 	err = IsisTrxvu_rcGetTelemetryAll_revC(ISIS_TRXVU_I2C_BUS_INDEX,
 			&revc_rx_tlm);
@@ -225,7 +225,6 @@ void TelemetrySaveTRXVU()
 	{
 		c_fileWrite(FILENAME_RX_REVC, &revc_rx_tlm);
 	}
-
 }
 
 void TelemetrySaveANT()
@@ -333,9 +332,3 @@ void GetCurrentWODTelemetry(WOD_Telemetry_t *wod){
 	NUMBER_OF_RESETS_ADDR, NUMBER_OF_RESETS_SIZE);
 }
 
-int initTelemetryCollector()
-{
-	return FRAM_read((unsigned char*)tlm_save_periods,
-			TLM_SAVE_PERIOD_START_ADDR,
-			NUM_OF_SUBSYSTEMS_SAVE_FUNCTIONS*sizeof(time_unix));
-}

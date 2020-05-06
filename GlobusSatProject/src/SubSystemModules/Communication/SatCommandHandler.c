@@ -6,6 +6,8 @@
 #include "GlobalStandards.h"
 #include "SatCommandHandler.h"
 
+#define FRAM_MAX_ADDRESS 539216400 //TODO: Delete this please
+
 
 typedef struct __attribute__ ((__packed__)) delayed_cmd_t
 {
@@ -42,6 +44,7 @@ CommandHandlerErr ClearDelayedCMD_FromBuffer(unsigned int start_addr, unsigned i
 
 CommandHandlerErr ParseDataToCommand(unsigned char * data, sat_packet_t *cmd)
 {
+	//todo fix
 	if(NULL == data || NULL == cmd){
 		return cmd_null_pointer_error;
 	}
@@ -54,6 +57,7 @@ CommandHandlerErr ParseDataToCommand(unsigned char * data, sat_packet_t *cmd)
 	if (NULL == err) {
 		return cmd_execution_error;
 	}
+
 	offset += sizeof(id);
 
 	char type;
@@ -70,7 +74,7 @@ CommandHandlerErr ParseDataToCommand(unsigned char * data, sat_packet_t *cmd)
 	}
 	offset += sizeof(subtype);
 
-	unsigned int data_length = 0;
+	unsigned short data_length = 0;
 	err = memcpy(&data_length, data + offset,sizeof(data_length));
 		if (NULL == err) {
 			return cmd_execution_error;
