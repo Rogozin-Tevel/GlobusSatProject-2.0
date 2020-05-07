@@ -41,14 +41,15 @@ void firstActivationProcedure()
 	int err = FRAM_read((unsigned char*)secondsSinceDeploy, SECONDS_SINCE_DEPLOY_ADDR, SECONDS_SINCE_DEPLOY_SIZE);  // Check time since deploy
 	if(err != 0)
 	{
-		secondsSinceDeploy = MINUTES_TO_SECONDS(30);
+		secondsSinceDeploy = MINUTES_TO_SECONDS(1);
 	}
 
-	muteTRXVU(MINUTES_TO_SECONDS(30) - secondsSinceDeploy);
-	while (secondsSinceDeploy < MINUTES_TO_SECONDS(30))
+	muteTRXVU(MINUTES_TO_SECONDS(1) - secondsSinceDeploy);
+	printf("~~~~~~~~~~~~~~~~~~~~~~~\nMuted\n~~~~~~~~~~~~~~~~~~~~~~~\n");
+	while (secondsSinceDeploy < MINUTES_TO_SECONDS(1))
 	{
 		vTaskDelay(SECONDS_TO_TICKS(10));  // Wait until time is up
-
+		secondsSinceDeploy -= SECONDS_TO_TICKS(10);
 		err = FRAM_write((unsigned char*)&secondsSinceDeploy, SECONDS_SINCE_DEPLOY_ADDR, SECONDS_SINCE_DEPLOY_SIZE);  // Write new time to memory
 		if (err != 0)
 		{
@@ -58,12 +59,14 @@ void firstActivationProcedure()
 		TelemetryCollectorLogic();
 		GetOnlineCommand(&cmd);
 		ActUponCommand(&cmd);
+
+		isis_eps__watchdog__from_t wdResponse;
+		isis_eps__watchdog__tm(EPS_I2C_BUS_INDEX,&wdResponse);  // Reset EPS watchdog
 	}
-
+	printf("~~~~~~~~~~~~~~~~~~~~~~~\nUnmuted\n~~~~~~~~~~~~~~~~~~~~~~~\n");
 	UnMuteTRXVU();
-
-	isis_eps__watchdog__from_t wdResponse;
-	isis_eps__watchdog__tm(EPS_I2C_BUS_INDEX,&wdResponse);  // Reset EPS watchdog
+	// TODO: Change first activation flag to FALSE
+	// TODO: Add ant deployment in a comment
 }
 
 #ifndef TESTING
@@ -141,7 +144,7 @@ int StartSPI()
 	int error= SPI_start(bus1_spi,slave1_spi);
 	return error;
 }
-// Done By Shachar Tzarfati
+// Done By Shachar Tzarfati & Ido Golan
 int StartTIME()
 {
 	Time deployTime = UNIX_DEPLOY_DATE_JAN_D1_Y2020;
@@ -155,17 +158,27 @@ int StartTIME()
 	{
 		err = FRAM_read((unsigned char *)&timeUni, MOST_UPDATED_SAT_TIME_ADDR,
 							MOST_UPDATED_SAT_TIME_SIZE);
+		if(err != 0)
+		{
+			return err;
+		}
 		err = Time_setUnixEpoch((unsigned int)timeUni);
+		if(err != 0)
+		{
+			return err;
+		}
 	}
 }
 // Done By Ido Golan
 int DeploySystem()
 {
+	Boolean8bit tlms_created[NUMBER_OF_TELEMETRIES];
 	if(isFirstActivation())
 	{
+		TelemetryCreateFiles(tlms_created);
+		WriteDefaultValuesToFRAM();
 		firstActivationProcedure();
 	}
-	WriteDefaultValuesToFRAM();
 }
 
 #define PRINT_IF_ERR(method) if(0 != err)printf("error in '" #method  "' err = %d\n",err);
@@ -176,45 +189,81 @@ int InitSubsystems()
 	{
 		printf("Error in the initialization of I2C\n");
 	}
+	else
+	{
+		printf("I2C Init - [OK]\n");
+	}
 
 	if(StartSPI() != 0)
 	{
 		printf("Error in the initialization of SPI\n");
+	}
+	else
+	{
+		printf("SPI Init - [OK]\n");
 	}
 
 	if(StartFRAM() != 0)
 	{
 		printf("Error in the initialization of FRAM\n");
 	}
+	else
+	{
+		printf("FRAM Init - [OK]\n");
+	}
 
 	if(StartTIME() != 0)
 	{
 		printf("Error in the initialization of TIME\n");
+	}
+	else
+	{
+		printf("TIME Init - [OK]\n");
 	}
 
 	if(InitTrxvu() != 0)
 	{
 		printf("Error in the initialization of Trxvu\n");
 	}
+	else
+	{
+		printf("TRXVU Init - [OK]\n");
+	}
 
 	if(EPS_Init() != 0)
 	{
 		printf("Error in the initialization of EPS\n");
+	}
+	else
+	{
+		printf("EPS Init - [OK]\n");
 	}
 
 	if(InitializeFS(isFirstActivation()) != 0)
 	{
 		printf("Error in the initialization of FS\n");
 	}
+	else
+	{
+		printf("FS Init - [OK]\n");
+	}
 
-	if(initTelemetryCollector() != 0)
+	if(InitTelemetryCollrctor() != 0)
 	{
 		printf("Error in the initialization of TelemetryCollector\n");
+	}
+	else
+	{
+		printf("Telemetry Collector Init - [OK]\n");
 	}
 
 	if(DeploySystem() != 0)
 	{
-		printf("Error in the initialization of DeploySystem\n");
+		printf("Error in DeploySystem\n");
+	}
+	else
+	{
+		printf("Deploy Systems - [OK]\n");
 	}
 
 	return 0;
