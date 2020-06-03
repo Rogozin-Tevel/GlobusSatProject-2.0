@@ -65,15 +65,16 @@ void firstActivationProcedure()
 	}
 	printf("~~~~~~~~~~~~~~~~~~~~~~~\nUnmuted\n~~~~~~~~~~~~~~~~~~~~~~~\n");
 	UnMuteTRXVU();
-	// TODO: Change first activation flag to FALSE
-	// TODO: Add ant deployment in a comment
-}
+
+	Boolean flag = FALSE;
+	FRAM_write((unsigned char*)&flag, FIRST_ACTIVATION_FLAG_ADDR, FIRST_ACTIVATION_FLAG_SIZE);
 
 #ifndef TESTING
 	//IsisAntS_autoDeployment(0, isisants_sideA, 10);
 	//IsisAntS_autoDeployment(0, isisants_sideB, 10);
 #endif
-	//TODO: log
+	print("Deployed Ants\n");
+}
 
 // Done By Shachar Sanger
 void WriteDefaultValuesToFRAM()
