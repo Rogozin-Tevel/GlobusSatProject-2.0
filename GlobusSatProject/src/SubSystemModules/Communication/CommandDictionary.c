@@ -28,10 +28,6 @@ int trxvu_command_router(sat_packet_t *cmd)
 		err = CMD_SendDumpAbortRequest(cmd);
 		break;
 
-	case FORCE_ABORT_DUMP_SUBTYPE:
-		err = CMD_ForceDumpAbort(cmd);
-		break;
-
 	case MUTE_TRXVU:
 		err = CMD_MuteTRXVU(cmd);
 		break;
@@ -178,6 +174,7 @@ int managment_command_router(sat_packet_t *cmd)
 	case FS_RESET_SUBTYPE:
 		CMD_ResetComponent(reset_filesystem);
 		break;
+
 	case UPDATE_TIME_SUBTYPE:
 		CMD_UpdateSatTime(cmd);
 		break;

@@ -31,8 +31,6 @@
 #else
 void taskMain()
 {
-	Boolean flag = TRUE;
-	FRAM_write((unsigned char*)&flag, FIRST_ACTIVATION_FLAG_ADDR, FIRST_ACTIVATION_FLAG_SIZE);
 	WDT_startWatchdogKickTask(10 / portTICK_RATE_MS, FALSE);
 
 	InitSubsystems();

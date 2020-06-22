@@ -137,11 +137,6 @@ void FinishDump(dump_arguments_t *task_args,unsigned char *buffer, ack_subtype_t
 
 }
 
-void AbortDump()
-{
-	FinishDump(NULL,NULL,ACK_DUMP_ABORT,NULL,0);
-}
-
 void SendDumpAbortRequest() {
 	if (eTaskGetState(xDumpHandle) == eDeleted) {
 		return;
@@ -151,9 +146,6 @@ void SendDumpAbortRequest() {
 	if (0 != err) {
 		if (NULL != xDumpLock) {
 			xSemaphoreGive(xDumpLock);
-		}
-		if (xDumpHandle != NULL) {
-			vTaskDelete(xDumpHandle);
 		}
 	}
 }
@@ -268,7 +260,6 @@ cleanup:
 	f_managed_releaseFS();
 	FinishDump(task_args, buffer, ack_return_code, NULL, 0);
 	while(1) {
-		// TODO: figure out why this task keeps running
 		LOGD("at end of dump task");
 		vTaskDelay(5000);
 	};
@@ -315,7 +306,7 @@ int EnterGS_Mode(){
 	}
 	Time_getUnixEpoch(&g_gs_start_time);
 	int err = 0;
-	//err = IsisTrxvu_tcSetIdlestate(ISIS_TRXVU_I2C_BUS_INDEX,trxvu_idle_state_on);
+//	err = IsisTrxvu_tcSetIdlestate(ISIS_TRXVU_I2C_BUS_INDEX,trxvu_idle_state_on);
 	vTaskDelay(100);
 	return err;
 }
