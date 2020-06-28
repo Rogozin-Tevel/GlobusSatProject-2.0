@@ -73,7 +73,7 @@ void firstActivationProcedure()
 	//IsisAntS_autoDeployment(0, isisants_sideA, 10);
 	//IsisAntS_autoDeployment(0, isisants_sideB, 10);
 #endif
-	print("Deployed Ants\n");
+	printf("Deployed Ants\n");
 }
 
 // Done By Shachar Sanger
